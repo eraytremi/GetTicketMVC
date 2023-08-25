@@ -1,0 +1,20 @@
+﻿.sub-menu {
+    display: flex;
+    gap: 20px;
+    background-color:mediumturquoise;
+    justify-content: center;
+    padding: 20px;
+}
+
+.sub-btn {
+    padding: 12px 30px;
+    background-color: #00ffff; /* Buton arka plan rengi */
+    color: #00CED1; /* Buton yazı rengi */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .sub-btn:hover {
+        background-color: #ff0000; /* Butona hover durumunda arka plan rengi */
+    }

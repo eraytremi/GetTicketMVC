@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "~/Areas/AdminPanel/Views/Shared/_Layout.cshtml";
+}
+@using GetTicketMVC.Areas.AdminPanel.Models.ApiTypes.BusFirm
+@model BusFirmList
+
+<html>
+<head>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+
+<body>
+
+
+
+    <div class="tab-pane" id="tab_2">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Firma Güncelleme Formu</h3>
+            </div>
+            <form>
+                <input type="hidden" id="txtBusFirmID" name="BusFirmID" value="@Model.BusFirmID">
+
+                    <div class="form-group">
+                        <label>Firma Adı</label>
+                        <input value="@Model.BusFirmName" type="text" class="form-control" id="txtBusFirmName" placeholder="Firma Adı">
+                    </div>
+
+              
+                <div class="card-footer">
+                    <button id="btnSave" type="button" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+            $(document).ready(function () {
+            $("#btnSave").click(function () {
+                var formData = new FormData();
+
+                formData.append("BusFirmID", $("#txtBusFirmID").val());
+                formData.append("BusFirmName", $("#txtBusFirmName").val());
+               
+
+                $.ajax({
+                    url: "/AdminPanel/BusFirm/Update",
+                    method: "post",
+                    datatype: "json",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.isSuccess) {
+                            alert("İşlem Başarılı " + response.message);
+                        }
+                        else {
+                            alert("İşlem Başarısız " + response.message);
+                        }
+                    }
+                });
+
+            });
+
+           });
+
+    </script>
+</body>
+</html>
+
+
+
+
+

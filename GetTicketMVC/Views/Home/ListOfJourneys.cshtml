@@ -1,0 +1,253 @@
+﻿@using System.Text.Json
+﻿@using Microsoft.AspNetCore.Http
+@using GetTicketMVC.Models.ApiTypes
+@inject IHttpContextAccessor _httpContextAccessor
+
+@{
+    var jsonData = _httpContextAccessor.HttpContext.Session.GetString("LoginUser");
+    var user = JsonSerializer.Deserialize<GetPassenger>(jsonData);
+
+}
+
+
+@using GetTicketMVC.Models.ViewModel
+@model ListOfJourneyViewModel
+
+<script src="~/page/BiletIslemleri/Anasayfa/anasayfa.js"></script>
+<link href="~/page/BiletIslemleri/Anasayfa/anasayfa.css" rel="stylesheet" />
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="container">
+                @foreach (var item in Model.BusJourneyDto)
+                {
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h3>@item.BusDto.BusFirmName</h3>
+                        </div>
+                        <div class="col-md-2">
+                            <h3>@item.DepartureTime</h3>
+                        </div>
+                        <div class="col-md-2">
+                            <h3>@item.BusDto.ModelOfBus</h3>
+                        </div>
+                        <div class="col-md-2">
+                            <h3>@item.Price.ToString("0.00") ₺</h3>
+                        </div>
+                    </div>
+                    <div class="row">                  
+                        <div class="col-md-10">
+                            <div class="otobus-alani">
+                                <div class="otobus">
+                                    @for (int i = 1; i <= item.BusDto.CapacityOfSeat; i++)
+                                    {
+                                        var busJourneyId = item.BusJourneyID;
+                                        var seatNo = i;
+
+
+                                        <div class="koltuk" style="background-color: @((IsSeatRed(item.BusJourneyID, i)) ? "red" : "white")" onclick="showConfirmationModal(@i, @item.BusJourneyID)">
+                                            @i
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Koltuk Satın Alma Onayı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Koltuk numarası: <span id="selectedSeatNumber"></span>
+                <input type="hidden" id="selectedBusJourneyID">
+                <input type="hidden" id="txtPassengerID" name="PassengerID" value="@user.PassengerID">
+                Koltuğu satın almak istiyor musunuz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Onayla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@functions {
+
+
+
+    bool IsSeatRed(int busJourneyID, int seatNo)
+    {
+        foreach (var item2 in Model.GetJourneyDto)
+        {
+            if (busJourneyID == item2.BusJourneyDto.BusJourneyID && seatNo == item2.SeatNo)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+
+
+
+<script>
+
+    function showConfirmationModal(seatNumber, busJourneyID) {
+
+        document.getElementById("selectedSeatNumber").innerText = seatNumber;
+
+
+        document.getElementById("selectedBusJourneyID").value = busJourneyID;
+
+
+        $('#confirmationModal').modal('show');
+    }
+
+
+
+    document.getElementById("btnSave").addEventListener("click", function () {
+        var seatNumber = document.getElementById("selectedSeatNumber").innerText;
+        var busJourneyID = document.getElementById("selectedBusJourneyID").value;
+        var passengerID = document.getElementById("txtPassengerID").value;
+
+        
+
+        var dto = {
+            BusJourneyID: busJourneyID,
+            SeatNo: seatNumber,
+            PassengerID: passengerID
+        };
+
+
+          $.ajax({
+            type: 'POST',
+            url: "/Payment/PaymentTicket",
+            data: { dto: JSON.stringify(dto) },
+          /*  data: '{dto: ' + JSON.stringify(dto) + '}',*/
+            dataType: "JSON",
+           /* contentType: "application/json; charset=utf-8",*/
+            success: function (response) {
+                  alert("İşlem Başarılı " + response.message);
+                  if (response.isSuccess) {        
+                    setTimeout(function () {
+                        
+                        window.location.reload(1);
+                    }, 3000);
+                    window.location.reload();
+                }
+                else {
+                    alert("İşlem Başarısız " + response.message);
+                }
+            },
+
+        });
+
+
+        $('#confirmationModal').modal('hide');
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @*$(".koltuk").on("click", function () {
+        var seat = $(this);
+        var seatStyle = $(this).css("background-color");
+
+        if (seatStyle === "rgb(255, 0, 0)") {
+
+            alert("Bu koltuk daha önce satın alındı!");
+        }
+        else {
+            var seatNumber = seat.text();   //Tıklanan koltuğun nosunu alacak.!
+
+            var busJourneyID = seat.closest(".row").prev().find(".col-md-3:first-child h3").text(); //busJourneyId alacak.
+
+
+
+            if (seat.hasClass("turquoise-bg")) {
+                seat.css("background-color", "white");
+                seat.removeClass("turquoise-bg");
+            } else {
+                seat.css("background-color", "turquoise");
+                seat.addClass("turquoise-bg");
+            }
+
+            $("#selectedSeatNumber").text(seatNumber);
+            $("#selectedBusJourneyID").text(busJourneyID);
+
+            //Modal penceresi oluşacak.
+
+            $("#confirmationModal").modal("show");
+
+        }
+    });
+
+
+
+
+    $("#btnSave").click(function () {
+        var seatNo = $("#selectedSeatNumber").text();
+        var busJourneyID = $("#selectedBusJourneyID").text();
+        var passengerID = $("#txtPassengerID").val();
+
+
+        var dataToSend = {
+            SeatNo: seatNo,
+            BusJourneyID: busJourneyID,
+            PassengerID: passengerID
+        };
+
+        $.ajax({
+            url: "/Payment/PaymentTicket",
+            method: "post",
+            data: JSON.stringify(dataToSend),
+            contentType: "application/json",
+            processData: false,
+            success: function (response) {
+                if (response.isSuccess) {
+                    alert("İşlem Başarılı " + response.message);
+                } else {
+                    alert("İşlem Başarısız " + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                alert("İstek gönderilirken bir hata oluştu. Hata: " + error);
+            }
+        });
+
+        $("#confirmationModal").modal("hide");
+
+
+    });*@

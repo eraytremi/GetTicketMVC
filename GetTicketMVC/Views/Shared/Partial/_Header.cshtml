@@ -1,0 +1,26 @@
+﻿@if (Context.Session.GetString("LoginUser") == null)
+{
+    <header>
+        <div class="navbar-nav ">
+            <nav class="topmenu">
+                <a href="/Home/Index" class="left-section btn">GetTicket.com</a>
+                <div class="right-section">
+                    <a href="/SignIn/Login" class="btn">Giriş Yap</a>
+                    <a href="/SignUp/Register" class="btn">Kayıt Ol</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+}
+else
+{
+    <header>
+        <nav class="topmenu">
+            <a href="/Home/Index" class="left-section btn">GetTicket.com</a>
+            <div class="right-section">
+                <a href="/Profile/Index" class="btn">Profil</a>
+                <a href="/ExitPage/Quit" class="btn">Çıkış Yap</a>
+            </div>
+        </nav>
+    </header>
+}

@@ -1,0 +1,20 @@
+﻿@*@using GetTicketMVC.Models.ApiTypes
+@model List<GetBusJourney>
+<link href="~/page/BiletIslemleri/Anasayfa/anasayfa.css" rel="stylesheet" />
+<script src="~/page/BiletIslemleri/Anasayfa/anasayfa.js"></script>
+<div class="sayfa-alani">
+        <div class="otobus-alani">
+            <div class="otobus">
+                @foreach (var item in Model)
+                {
+                    for (int i = 1; i<= item.CapacityOfSeat; i++)
+                    {
+
+                        <div class="koltuk">@i</div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>*@
+

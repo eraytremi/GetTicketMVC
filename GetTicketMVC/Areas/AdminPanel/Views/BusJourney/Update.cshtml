@@ -1,0 +1,110 @@
+﻿@{
+    Layout = "~/Areas/AdminPanel/Views/Shared/_Layout.cshtml";
+}
+@using GetTicketMVC.Areas.AdminPanel.Models.ViewModel
+@model UpdateBusJourneyViewModel
+
+<html>
+<head>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+
+<body>
+
+
+
+    <div class="tab-pane" id="tab_2">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Otobüs Güncelleme Formu</h3>
+            </div>
+            <form>
+
+                <input type="hidden" id="txtBusJourneyID" name="BusJourneyID" value="@Model.BusJourneyList.BusJourneyID">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Kalkış Noktası</label>
+                        <input value="@Model.BusJourneyList.DeparturePoint" type="text" class="form-control" id="txtDeparturePoint" placeholder="Kalkış Noktası">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Varış Noktası</label>
+                        <input value="@Model.BusJourneyList.DestinationPoint" type="text" class="form-control" id="txtDestinationPoint" placeholder="Varış Noktası">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="tarihSaat">Tarih ve saat seçin:</label>
+                            <input type="datetime-local" id="txtDepartureTime" name="DepartureTime" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Fiyat</label>
+                    <input value="@Model.BusJourneyList.Price" type="number" class="form-control" id="txtPrice" placeholder="Fiyat">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Plaka No</label>
+                    <select id="txtBusID" name="BusID" class="form-select">
+                        <option value="-1">Seçiniz...</option>
+                        @foreach (var item in Model.BusLists)
+                        {
+                            <option value="@item.BusID">@item.BusPlate</option>
+                        }
+                    </select>
+                </div>
+                <div class="card-footer">
+                    <button id="btnSave" type="button" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+            $(document).ready(function () {
+            $("#btnSave").click(function () {
+                var formData = new FormData();
+
+                formData.append("DeparturePoint", $("#txtDeparturePoint").val());
+                formData.append("DestinationPoint", $("#txtDestinationPoint").val());
+                formData.append("DepartureTime", $("#txtDepartureTime").val());
+                formData.append("Price", $("#txtPrice").val());
+                formData.append("BusID", $("#txtBusID").val());
+                formData.append("BusJourneyID", $("#txtBusJourneyID").val());
+
+
+                $.ajax({
+                    url: "/AdminPanel/BusJourney/Update",
+                    method: "post",
+                    datatype: "json",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.isSuccess) {
+                            alert("İşlem Başarılı " + response.message);
+                        }
+                        else {
+                            alert("İşlem Başarısız " + response.message);
+                        }
+                    }
+                });
+
+            });
+
+           });
+
+    </script>
+</body>
+</html>
+
+
+
+
+

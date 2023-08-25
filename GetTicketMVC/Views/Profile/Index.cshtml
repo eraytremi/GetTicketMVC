@@ -1,0 +1,92 @@
+﻿@using System.Text.Json
+﻿@using Microsoft.AspNetCore.Http
+@using GetTicketMVC.Models.ApiTypes
+@inject IHttpContextAccessor _httpContextAccessor
+
+@{
+    var jsonData = _httpContextAccessor.HttpContext.Session.GetString("LoginUser");
+    var user = JsonSerializer.Deserialize<GetPassenger>(jsonData);
+
+}
+
+
+
+
+
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="text-black-50"> @user.PassengerName @user.PassengerLastName</span><span> </span></div>
+            <a href="/Profile/MyJourney/@user.PassengerID" class="btn">Yolculuklarım</a>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Ayarları</h4>
+                </div>
+
+                <input type="hidden" id="txtPassengerID" name="PassengerID" value="@user.PassengerID">
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">İsim</label><input id="txtPassengerName" type="text" class="form-control" placeholder="isim" value="@user.PassengerName"></div>
+                    <div class="col-md-6"><label class="labels">Soyİsim</label><input id="txtPassengerLastName" type="text" class="form-control" value="@user.PassengerLastName" placeholder="soyisim"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Tel No</label><input id="txtPhone" type="text" class="form-control" placeholder="tel no" value="@user.Phone"></div>
+                    <div class="col-md-12"><label class="labels">Email</label><input id="txtEmail" type="text" class="form-control" placeholder="Email" value="@user.Email"></div>
+                    <div class="col-md-12"><label class="labels">Şifre</label><input id="txtPassword" type="text" class="form-control" placeholder="" value="@user.Password"></div>
+                    <div class="col-md-12"><label class="labels">TC No</label><input id="txtIDNumber" type="text" class="form-control" placeholder="ID No" value="@user.IDNumber" readonly> </div>
+                </div>
+                <div class="col-md-12"><label class="labels">Kayıt Tarihi</label><input id="txtRegisterTime" type="text" class="form-control" placeholder="" value="@user.RegisterTime" readonly></div>         
+            </div>
+                <div class="col-md-12">
+                    <label class="labels">Cinsiyet</label>
+                    <select id="txtGender" name="Gender" class="form-select" required>
+                        <option value="-1">Seçiniz...</option>
+                        <option>Erkek</option>
+                        <option>Kadın</option>
+                    </select>
+                </div>
+                <div class="mt-5 text-center"><button id="btnSave" class="btn btn-primary " type="button">Güncelle</button></div>
+            </div>
+        </div>
+    </div>
+
+
+
+<script>
+            $(document).ready(function () {
+            $("#btnSave").click(function () {
+                var formData = new FormData();
+
+                formData.append("PassengerID", $("#txtPassengerID").val());
+                formData.append("PassengerName", $("#txtPassengerName").val());
+                formData.append("PassengerLastName", $("#txtPassengerLastName").val());
+                formData.append("Phone", $("#txtPhone").val());
+                formData.append("Email", $("#txtEmail").val());
+                formData.append("Password", $("#txtPassword").val());
+                formData.append("IDNumber", $("#txtIDNumber").val());
+                formData.append("RegisterTime", $("#txtRegisterTime").val());
+                formData.append("Gender", $("#txtGender").val());
+
+                $.ajax({
+                    url: "/Profile/Update",
+                    method: "post",
+                    datatype: "json",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.isSuccess) {
+                            alert("İşlem Başarılı " + response.message);
+                        }
+                        else {
+                            alert("İşlem Başarısız " + response.message);
+                        }
+                    }
+                });
+
+            });
+
+           });
+
+</script>

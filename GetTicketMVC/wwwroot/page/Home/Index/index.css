@@ -1,0 +1,32 @@
+﻿.form-label
+{
+    display:block;
+}
+
+.search-area {
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    padding: 3%;
+    box-shadow: 0px 0px 8px 0px lightgray;
+    max-width: 400px;
+    background-color:white;
+}
+
+.search-background {
+    margin-top: 5%;
+    padding:4%;
+    background-image: url("https://s3.eu-central-1.amazonaws.com/static.obilet.com/images/page-banner/spring-background-2020.png");
+}
+
+#btnSave {
+    border: 1px solid lightgray;
+    margin-top: 15px;
+    width: -webkit-fill-available;
+}
+
+#search-date {
+    width: -webkit-fill-available;
+    border: 1px solid gray;
+    padding: 1.5%;
+    border-radius: 5px;
+}

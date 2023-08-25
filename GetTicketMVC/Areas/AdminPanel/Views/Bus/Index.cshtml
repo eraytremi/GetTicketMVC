@@ -1,0 +1,208 @@
+﻿@{
+    Layout = "~/Areas/AdminPanel/Views/Shared/_Layout.cshtml";
+}
+
+@using GetTicketMVC.Areas.AdminPanel.Models.ViewModel
+@model BusViewModel
+    
+
+
+
+@section customStyles{
+    <link rel="stylesheet" href="~/adminPanel/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/adminPanel/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/adminPanel/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+}
+
+@section customScripts{
+    <script src="~/adminPanel/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/adminPanel/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/adminPanel/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/adminPanel/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/adminPanel/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/adminPanel/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/adminPanel/plugins/jszip/jszip.min.js"></script>
+    <script src="~/adminPanel/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/adminPanel/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/adminPanel/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/adminPanel/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/adminPanel/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>
+    $(document).ready(function(){
+      $("#example1").DataTable({
+        language: {
+         url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json',
+     },
+       "responsive": true,
+       "lengthChange": false,
+       "autoWidth": false,
+       "buttons": ["excel", "pdf"]
+     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+     $("#btnSave").click(function () { 
+         var formData = new FormData();
+
+         formData.append("BusFirmID", $("#txtBusFirmID").val());
+         formData.append("ModelOfBus", $("#txtModelOfBus").val());
+         formData.append("BusPlate", $("#txtBusPlate").val());
+         formData.append("CapacityOfSeat", $("#txtCapacityOfSeat").val());
+
+       $.ajax({
+          url:"/AdminPanel/Bus/InsertBus",
+          method:"post",
+          datatype:"json",
+          data:formData,
+          contentType: false,
+          processData: false,
+          success:function(response){
+            if(response.isSuccess)
+            {
+              alert("İşlem Başarılı " + response.message);
+            }
+            else
+            {
+              alert("İşlem Başarısız " + response.message);
+            }
+          }
+       });
+
+     });
+    });
+
+        function deleteBus(busID) {
+            if (confirm("Bu otobüsü silmek istediğinizden emin misiniz?")) {
+                $.ajax({
+                    url: "/AdminPanel/Bus/Delete/" + busID, 
+                    type: "POST", 
+                    success: function (result) {
+                        
+                        alert("Otobüs başarıyla silindi!");
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                     
+                        alert("Bir hata oluştu: " + error);
+                    }
+                });
+            }
+        }
+       
+    </script>
+
+}
+
+
+
+
+
+<div class="row">
+    <div class="col-12">
+        <!-- Custom Tabs -->
+        <div class="card">
+            <div class="card-header d-flex p-0">
+                <h3 class="card-title p-3 center">Otobüs Listesi</h3>
+                <ul class="nav nav-pills ml-auto p-2">
+                    <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Liste</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Yeni</a></li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th>Otobüs No</th>
+                                    <th>Otobüs Firması</th>
+                                    <th>Model</th>
+                                    <th>Plaka</th>
+                                    <th>Koltuk Sayısı</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.BusesList)
+                                {
+                                    <tr>
+
+                                        <td>@item.BusID</td>
+                                        <td>@item.BusFirmName</td>
+                                        <td>@item.ModelOfBus</td>
+                                        <td>@item.BusPlate</td>
+                                        <td>@item.CapacityOfSeat</td>          
+                                        <td>
+                                            <a href="/AdminPanel/Bus/Update/@item.BusID" class="btn btn-primary">Güncelle</a>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0);" class="btn btn-danger" onclick="deleteBus(@item.BusID)">Sil</a>
+
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Otobüs No</th>
+                                    <th>Otobüs Firması</th>
+                                    <th>Model</th>
+                                    <th>Plaka</th>
+                                    <th>Koltuk Sayısı</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                    <div class="tab-pane" id="tab_2">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Yeni Otobüs Kayıt Formu</h3>
+                            </div>
+                            <form>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label class="form-label">Otobüs Markası</label>
+                                        <select id="txtBusFirmID" name="BusFirmID" class="form-select">
+                                            <option value="-1">Seçiniz...</option>
+                                            @foreach (var item in Model.BusFirmsList)
+                                            {
+                                                <option value="@item.BusFirmID">@item.BusFirmName</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Otobüs Markası</label>
+                                        <select id="txtModelOfBus" name="ModelOfBus" class="form-select">
+                                            <option value="-1">Seçiniz...</option>
+                                            <option>Classic</option>
+                                            <option>Suit</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Otobüs Plakası</label>
+                                        <input type="text" class="form-control" id="txtBusPlate" placeholder="Otobüs Plakası">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Koltuk Sayısı</label>
+                                        <input type="text" class="form-control" id="txtCapacityOfSeat" placeholder="Koltuk Sayısı">
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button id="btnSave" type="button" class="btn btn-primary">Kaydet</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

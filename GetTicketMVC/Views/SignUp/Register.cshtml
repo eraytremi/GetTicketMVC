@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login V6</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="~/Login/images/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Login/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/Login/css/main.css">
+    <!--===============================================================================================-->
+    <script src="~/page/Register/register.js"></script>
+
+</head>
+
+<body>
+
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100 p-t-85 p-b-20">
+                <form class="login100-form validate-form">
+                    <span class="login100-form-title p-b-70">
+                        Hoşgeldin
+                    </span>
+                    <div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate="İsmini gir!">
+                        <input id="txtPassengerName" class="input100" type="text" name="PassengerName">
+                        <span class="focus-input100" data-placeholder="İsim"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate="Soyismini gir!">
+                        <input id="txtPassengerLastName" class="input100" type="text" name="PassengerLastName">
+                        <span class="focus-input100" data-placeholder="Soyisim"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-50" data-validate="Şifreyi Gir!">
+                        <input id="txtPassword" class="input100" type="password" name="Password">
+                        <span class="focus-input100" data-placeholder="Şifre"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-50" data-validate="Telefonu gir!">
+                        <input id="txtPhone" class="input100" type="tel" name="Phone">
+                        <span class="focus-input100" data-placeholder="Telefon"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-50" data-validate="Kimlik numaranı gir!">
+                        <input id="txtIDNumber" class="input100" type="number" name="IDNumber">
+                        <span class="focus-input100" data-placeholder="Kimlik Numarası"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-50" data-validate="Mail adresini gir!">
+                        <input id="txtEMail" class="input100" type="email" name="Email">
+                        <span class="focus-input100" data-placeholder="Email"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-50">
+                        <label class="form-label">Cinsiyet</label>
+                        <select id="txtGender" name="Gender" class="form-select">
+                            <option value="-1">Seçiniz...</option>
+                            <option>Erkek</option>
+                            <option>Kadın</option>
+                        </select>
+                    </div>
+
+
+                    <div class="container-login100-form-btn">
+                        <button id="btnSave" type="button" class="login100-form-btn">
+                            Kayıt Ol
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="divMessages"></div>
+    <div id="dropDownSelect1"></div>
+
+    <!--===============================================================================================-->
+    <script src="~/Login/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Login/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Login/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/Login/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Login/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Login/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/Login/vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Login/vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Login/js/main.js" ></script>
+</body>
+</html>

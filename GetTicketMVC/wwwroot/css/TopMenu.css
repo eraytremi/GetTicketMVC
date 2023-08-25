@@ -1,0 +1,39 @@
+﻿
+body {
+    margin: 0;
+    padding: 0;
+    background-color: turquoize; /* Arka plan rengi */
+    font-family: Arial, sans-serif;
+}
+
+.topmenu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #00CED1; /* Menü arka plan rengi */
+    padding: 10px 20px;
+    color: #fff; /* Menü yazı rengi */
+}
+
+.left-section {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.right-section {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    background-color: #fff; /* Buton arka plan rengi */
+    color: #00CED1; /* Buton yazı rengi */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .btn:hover {
+        background-color: #f0f0f0; /* Butona hover durumunda arka plan rengi */
+    }
